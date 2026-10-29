@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sourcegrounded-midterm"
+version = "1.0.0"
+description = "Source-grounded RAG and citation verification research prototype"
+requires-python = ">=3.10"
+authors = [{name = "Bhagyasri Uddandam"}]
+readme = "README.md"
+license = {text = "MIT"}
+dependencies = ["groq>=0.34,<2"]
+
+[project.optional-dependencies]
+ui = ["streamlit>=1.30,<2"]
+pdf = ["pypdf>=4,<7"]
+semantic = ["sentence-transformers>=3,<6"]
+dev = ["pytest>=8,<10"]
+
+[project.scripts]
+sourcegrounded = "sourcegrounded.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sourcegrounded*"]

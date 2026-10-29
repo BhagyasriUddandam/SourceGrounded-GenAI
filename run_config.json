@@ -1,0 +1,8 @@
+{
+  "run_id": "20261028T193129Z",
+  "signature": "002eda37ced8ecebb487a3e9ccb0294fec984f5a40c1b20a6ca250f282cc0fbb",
+  "selected_questions": 36,
+  "repeats": 1,
+  "model": "openai/gpt-oss-120b",
+  "temperature": 0.1
+}

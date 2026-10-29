@@ -1,2 +1,222 @@
-# SourceGrounded-GenAI
-A citation-aware retrieval-augmented generation system with evidence validation, abstention safeguards, and comparative evaluation.
+# SourceGrounded: Citation-Grounded Generative AI Q&A
+
+**AAI 6665 — Generative AI | Module 7.3 Source Code**
+
+**Student:** Bhagyasri Uddandam  
+**Program:** MPS Applied Machine Intelligence, Northeastern University  
+**Project:** *Source-Grounded Conversational Question Answering Using Retrieval-Augmented Generation*
+
+## 1. Purpose and proposed comparison
+
+SourceGrounded is a deployable educational text-generation prototype built to test whether grounding a language model in a small, approved document collection improves responses to academic and technical questions. It follows the submitted Module 3 proposal, comparing:
+
+1. **Model-only:** a language model answers without retrieved context.
+2. **Basic RAG:** top-ranked local passages are included in the prompt; the model is encouraged to cite them.
+3. **Guarded RAG:** the model is instructed to use supplied passages only, return structured JSON with citation IDs, ask at most one clarification, and abstain if evidence is insufficient. Programmatic validation withholds malformed responses and unknown citation IDs.
+
+**Crucial:** A syntactically valid citation is not proof that a passage supports a generated claim. The project supplies a human annotation workflow for factuality and abstention evaluation.
+
+Included: Python CLI; optional Streamlit chat interface; pure-Python TF-IDF cosine retrieval; optional embeddings; provenance-preserving local document ingestion; eight-passage synthetic pilot corpus; eight short original technical research summaries with original-source URLs; 36-question evaluation set; experiment runner and CSV review template; offline tests and architecture documentation.
+
+## 2. Requirements
+
+- Python 3.10+.
+- No GPU needed for default retrieval or hosted inference.
+- Internet needed for dependency installation and live LLM generation only; all offline commands work without internet.
+- API credential for live generation. Default: Groq official Python SDK, model openai/gpt-oss-120b. Availability may change over time.
+
+## 3. Installation
+
+Open a terminal inside the unzipped GenAI_Midterm_Source_Code folder.
+
+**macOS / Linux**
+
+~~~bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[ui,pdf]"
+~~~
+
+**Windows PowerShell**
+
+~~~powershell
+py -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -e ".[ui,pdf]"
+~~~
+
+Offline retrieval and unit tests can run without installing dependencies. Live generation **does require the Groq Python SDK**, which is installed by the package installation above. The UI extra installs Streamlit; the PDF extra installs pypdf; the semantic extra installs Sentence-Transformers.
+
+### Configure a provider
+
+1. Copy the provided .env.example file to a new local file named .env.
+2. Replace the placeholder GROQ_API_KEY value with **your own** API key.
+3. Keep the .env file private. It is ignored by Git and not included in the submission.
+4. For free/developer plans, keep GENAI_MODEL set to openai/gpt-oss-120b (Groq deprecated Llama 3.3 for these plans in August 2026). GENAI_BASE_URL is normally https://api.groq.com/openai/v1. The client uses Groq's official SDK and reads the credential from GROQ_API_KEY.
+
+Do not paste API keys into submitted code, public repositories, or screenshots.
+
+## 4. How to run
+
+### A. Retrieve sources offline — no key needed
+
+~~~bash
+python -m sourcegrounded.cli retrieve "When is the poster deadline?"
+~~~
+
+JSON output includes passage IDs, relevance scores, text, title and source provenance. The demonstration is synthetic: these are NOT real university policies.
+
+### B. Generate answers — API key required
+
+~~~bash
+python -m sourcegrounded.cli ask "When is the reading group?" --mode guarded-rag
+python -m sourcegrounded.cli ask "When is the reading group?" --mode basic-rag
+python -m sourcegrounded.cli ask "When is the reading group?" --mode model-only
+~~~
+
+For an original summary of technical primary research:
+
+~~~bash
+python -m sourcegrounded.cli ask "What does Self-RAG add?" --sources data/technical_notes.json --mode guarded-rag
+~~~
+
+Responses include the generated answer, evidence status, cited source IDs, retrieved passages, provider-reported token usage and latency. Model-only responses are marked unverified. A guarded answer with zero relevant retrieval results abstains without calling the provider.
+
+### C. Local web interface — API key required for live generation
+
+~~~bash
+python -m streamlit run app.py
+~~~
+
+Open the URL printed in your terminal, usually http://localhost:8501. Select a source collection, mode and retrieval settings. The sidebar Reset conversation button resets the one-clarification budget.
+
+### D. Retrieval benchmark — no API key needed
+
+~~~bash
+python -m sourcegrounded.cli evaluate-retrieval --sources data/demo_sources.json --cases data/eval_36.json
+~~~
+
+This scores query-level recall@K over 24 cases with gold evidence and counts irrelevant retrieval in the 12 unanswerable cases. Retrieval quality is **not** a direct measure of hallucination.
+
+### E. Run the three-way experiment and prepare human review
+
+**Small live pilot:**
+
+~~~bash
+python -m sourcegrounded.cli evaluate --limit 3 --repeats 1 --out outputs/pilot --confirm-api-calls
+~~~
+
+**Entire proposal experiment (36 questions × 3 modes × 2 repeats = up to 216 calls):**
+
+~~~bash
+python -m sourcegrounded.cli evaluate --limit 36 --repeats 2 --out outputs/full --confirm-api-calls
+~~~
+
+Batch generation is deliberately protected by the required --confirm-api-calls switch. Provider fees, quotas and data-sharing terms apply. Guarded mode may skip a call when no relevant passage is found.
+
+The output folder contains:
+
+| File | Contents |
+| --- | --- |
+| model_outputs.json | Actual answer text, evidence status, citations, retrieved evidence, latency and usage per run |
+| run_summary.json | Run configuration and count-based metrics; does not invent human review scores |
+| human_annotation_template.csv | Rows to annotate; all human quality fields initially **blank** |
+
+After manually labeling supported claims, unsupported claims, valid/total citations, usefulness (1–5), and appropriate abstention (0/1), run:
+
+~~~bash
+python -m sourcegrounded.cli score-human --csv outputs/full/human_annotation_template.csv
+~~~
+
+Only entered labels contribute to quality metrics. Read docs/EVALUATION_GUIDE.md before scoring.
+
+### F. Import locally approved primary documents
+
+Put your permitted TXT, Markdown, HTML or PDF source files inside a folder named my_documents. Copy and edit data/source_manifest.example.json so its filenames and metadata match your sources. Then:
+
+~~~bash
+python -m sourcegrounded.cli ingest --directory my_documents --manifest data/source_manifest.example.json --out data/my_sources.json
+python -m sourcegrounded.cli retrieve "How is retrieval evaluated?" --sources data/my_sources.json
+~~~
+
+Ingestion reads only local files and does not crawl websites. Verify each source's authorship, accuracy, usage rights and privacy status. The manifest contains an illustrative sample_document.pdf entry; replace it with real filenames.
+
+### Optional embedding retriever
+
+~~~bash
+python -m pip install -e ".[semantic]"
+python -m sourcegrounded.cli retrieve "How do embeddings compare sentences?" --sources data/technical_notes.json --retriever semantic --min-score 0.2
+~~~
+
+On first use, the embedding model is downloaded and its weights may consume disk space. Default TF-IDF needs no downloaded model.
+
+## 5. Testing
+
+~~~bash
+python -m unittest discover -s tests -v
+~~~
+
+The 26 unit tests use offline fake model clients and an SDK mock. They cover corpus validation and hashes, local ingestion, retrieval, the three modes, rejected citations, structured JSON, one clarification, 36-case benchmark balance, official SDK integration, and a human-review workflow. See docs/VERIFICATION.md for results and known limits.
+
+## 6. Package contents
+
+~~~text
+GenAI_Midterm_Source_Code/
+  README.md                    This developer hand-off
+  LICENSE                      MIT software license
+  pyproject.toml               Python package metadata
+  .env.example                 Names and placeholders only
+  .gitignore                   Prevent accidental credential commits
+  app.py                       Optional Streamlit app
+  sourcegrounded/
+    __init__.py
+    cli.py                     Offline and online commands
+    corpus.py                  Local ingestion, metadata and text chunks
+    retrieval.py               TF-IDF and optional semantic search
+    llm.py                     Hosted chat API adapter
+    pipeline.py                Three generation conditions and guardrails
+    evaluation.py              Metrics, logs and review scoring
+  data/
+    demo_sources.json          Eight original synthetic proposal passages
+    technical_notes.json       Original summaries of research sources
+    eval_36.json               Balanced 36-case benchmark
+    source_manifest.example.json
+  docs/
+    ARCHITECTURE.md
+    EVALUATION_GUIDE.md
+    PROPOSAL_ALIGNMENT.md
+    VERIFICATION.md
+  tests/
+    test_corpus.py
+    test_evaluation.py
+    test_llm.py
+    test_pipeline.py
+    test_retrieval.py
+~~~
+
+## 7. Privacy, governance and limitations
+
+- Synthetic rules are fiction, not official Northeastern University policies.
+- Research notes are original paraphrases linking to real primary research; validate details against the originals. No copied full-text research corpus is redistributed.
+- No secrets, personal student information or third-party private content are supplied in this ZIP. Hosted generation transmits each question and selected context to the selected provider; seek consent before using any sensitive sources.
+- Local CLI history is not automatically saved. Batch evaluation explicitly stores model outputs locally in the chosen outputs folder. Protect and delete that folder in accordance with your policy.
+- Structural source-ID validation does not establish semantic faithfulness, prevent all prompt injections or prove legal compliance. Manual review is required before treating answers as factual.
+- TF-IDF can miss synonyms, and lexical overlap can retrieve irrelevant documents. Thresholds are tuned only for the synthetic demonstration. Robust threshold calibration and embedding evaluation are future work.
+- The prototype has no access control, hosted deployment, production safety assurance, cost monitoring, long-term state store or human-subject data collection.
+- **Live LLM output metrics were not measured while constructing this ZIP:** no GROQ_API_KEY was available. The package does not fabricate experimental results. Tests and retrieval benchmark were run offline.
+
+## 8. Primary references
+
+1. Lewis et al. (2020), *Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks*: https://arxiv.org/abs/2005.11401
+2. Reimers and Gurevych (2019), *Sentence-BERT*: https://arxiv.org/abs/1908.10084
+3. Thakur et al. (2021), *BEIR*: https://arxiv.org/abs/2104.08663
+4. Asai et al. (2023), *Self-RAG*: https://arxiv.org/abs/2310.11511
+5. Liu et al. (2023), *Lost in the Middle*: https://arxiv.org/abs/2307.03172
+6. Es et al. (2023), *RAGAS*: https://arxiv.org/abs/2309.15217
+7. Saad-Falcon et al. (2023), *ARES*: https://arxiv.org/abs/2311.09476
+8. NIST (2024), *AI RMF Generative AI Profile (AI 600-1)*: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf
+9. Groq, official API compatibility and model catalog: https://console.groq.com/docs/openai and https://console.groq.com/docs/models
+
+Original program logic, synthetic source documents and benchmark questions were prepared for this AAI 6665 project; external technical claims are attributed above.

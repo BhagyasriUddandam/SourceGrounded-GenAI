@@ -1,0 +1,28 @@
+{
+  "run_id": "20261028T193129Z",
+  "questions_selected": 36,
+  "repeats": 1,
+  "modes": [
+    "model-only",
+    "basic-rag",
+    "guarded-rag"
+  ],
+  "output_rows": 108,
+  "provider_requests": 97,
+  "provider_requests_note": "Number of rows with a model response, not total network attempts or retries.",
+  "provider_error_rows": 1,
+  "checkpoint_path": "outputs/final/run_checkpoint.jsonl",
+  "resume_enabled": true,
+  "outputs_needing_review": 0,
+  "evidence_status_counts": {
+    "unverified": 36,
+    "not_validated": 36,
+    "supported": 11,
+    "provider_error": 1,
+    "partial": 11,
+    "insufficient": 13
+  },
+  "human_quality_metrics": "Not measured: fill annotation CSV, then run score-human.",
+  "temperature": 0.1,
+  "total_reported_tokens": 34123
+}

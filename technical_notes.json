@@ -1,0 +1,78 @@
+{
+  "corpus_name": "Original summaries of the cited primary research and governance documents",
+  "notice": "These short student-written summaries point to primary materials. Consult linked originals to verify claims; these are not verbatim extracts.",
+  "sources": [
+    {
+      "source_id": "R1",
+      "title": "RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks (summary)",
+      "text": "Lewis and collaborators (2020) study retrieval-augmented generation, combining a pretrained sequence-to-sequence language model with a non-parametric dense index of external documents. Retrieval supplies potentially relevant evidence to generation rather than relying only on memorized model parameters. The system still requires evaluation for factual accuracy and source relevance.",
+      "author": "Lewis et al.", "year": "2020",
+      "url": "https://arxiv.org/abs/2005.11401",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper for authoritative account."
+    },
+    {
+      "source_id": "R2",
+      "title": "Sentence-BERT: Sentence Embeddings Using Siamese BERT-Networks (summary)",
+      "text": "Reimers and Gurevych (2019) propose Sentence-BERT, which builds sentence embeddings for efficient semantic similarity comparisons. Sentence vectors can be compared using cosine similarity, offering an alternative to lexical TF-IDF for matching a question to relevant passages.",
+      "author": "Reimers and Gurevych", "year": "2019",
+      "url": "https://arxiv.org/abs/1908.10084",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper."
+    },
+    {
+      "source_id": "R3",
+      "title": "BEIR: A Heterogeneous Benchmark for Zero-Shot Evaluation (summary)",
+      "text": "Thakur et al. (2021) introduce BEIR, a collection of heterogeneous information retrieval tasks used to evaluate retrieval models across domains. Their work motivates reporting retrieval quality independently of final generated-answer quality, because search success and truthful synthesis are different outcomes.",
+      "author": "Thakur et al.", "year": "2021",
+      "url": "https://arxiv.org/abs/2104.08663",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper."
+    },
+    {
+      "source_id": "R4",
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection (summary)",
+      "text": "Asai et al. (2023) describe Self-RAG, where a language model learns to retrieve evidence and critique its own output using reflection tokens. The paper emphasizes that retrieval alone is insufficient: generated statements should be checked against evidence. This course implementation uses simpler rule-based citation-ID checks and human review, not trained Self-RAG.",
+      "author": "Asai et al.", "year": "2023",
+      "url": "https://arxiv.org/abs/2310.11511",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper."
+    },
+    {
+      "source_id": "R5",
+      "title": "Lost in the Middle: How Language Models Use Long Contexts (summary)",
+      "text": "Liu et al. (2023) find that language models can struggle to use relevant material placed in the middle of long contexts. This motivates small top-k retrieval contexts and testing changes in evidence order, rather than assuming that supplying more text always helps.",
+      "author": "Liu et al.", "year": "2023",
+      "url": "https://arxiv.org/abs/2307.03172",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper."
+    },
+    {
+      "source_id": "R6",
+      "title": "RAGAS: Automated Evaluation of Retrieval Augmented Generation (summary)",
+      "text": "Es et al. (2023) introduce RAGAS, a framework for reference-free evaluation of retrieval-augmented generation along dimensions such as faithfulness and answer relevance. Automated measures may assist evaluation, but this project still requires manual judgments for claim support and citation precision.",
+      "author": "Es et al.", "year": "2023",
+      "url": "https://arxiv.org/abs/2309.15217",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper."
+    },
+    {
+      "source_id": "R7",
+      "title": "ARES: An Automated Evaluation Framework for RAG Systems (summary)",
+      "text": "Saad-Falcon et al. (2023) describe ARES, which evaluates retrieval-augmented generation through dimensions that include context relevance and answer faithfulness. The paper motivates separating retrieval from generated-answer assessment and documenting the evaluation process.",
+      "author": "Saad-Falcon et al.", "year": "2023",
+      "url": "https://arxiv.org/abs/2311.09476",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; refer to linked paper."
+    },
+    {
+      "source_id": "R8",
+      "title": "NIST AI 600-1: Generative AI Profile (summary)",
+      "text": "The NIST AI Risk Management Framework Generative AI Profile (AI 600-1, 2024) addresses risks such as confabulation, data privacy, harmful outputs and information integrity. A prototype that displays provenance, avoids storing personal data and supports abstention is more transparent, but these controls do not by themselves establish full NIST compliance.",
+      "author": "National Institute of Standards and Technology", "year": "2024",
+      "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf",
+      "source_type": "student_original_summary",
+      "license_note": "Original paraphrase; consult the official NIST document."
+    }
+  ]
+}

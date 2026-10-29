@@ -1,0 +1,12 @@
+{
+  "sample_document.pdf": {
+    "source_id": "Paper1",
+    "title": "A Research Paper from an Approved Local Source",
+    "author": "Research author names",
+    "year": "2024",
+    "url": "https://example.org/replace-with-original-document-url",
+    "source_type": "primary_paper",
+    "license_note": "User confirms permission to use this local copy",
+    "retrieved_at": "2026-10-28"
+  }
+}

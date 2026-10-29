@@ -1,0 +1,54 @@
+{
+  "corpus_name": "Proposed eight-passage synthetic retrieval pilot",
+  "notice": "Synthetic statements invented for coursework testing; not real university policies.",
+  "sources": [
+    {
+      "source_id": "S1", "title": "Synthetic AI Reading Group Notice",
+      "text": "The graduate AI reading group meets on Wednesday at 4 PM in Room 210. Attendees must register by Tuesday.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S2", "title": "Synthetic Research Poster Guidelines",
+      "text": "Research posters must be submitted as PDF files by Friday at noon. A maximum of one poster per team is permitted.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S3", "title": "Synthetic Dataset Access Policy",
+      "text": "Public benchmark datasets may be downloaded for teaching. Restricted datasets require project owner written approval.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S4", "title": "Synthetic Question Answering Evaluation Instructions",
+      "text": "For question answering evaluations, run three prompt variants with a fixed temperature and log answer citations.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S5", "title": "Synthetic API Security Guidelines",
+      "text": "Model API secrets must be stored in environment variables. Never place API keys in source control.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S6", "title": "Synthetic Prompt Engineering Office Hours",
+      "text": "Office hours for prompt engineering are Monday at 2 PM online.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S7", "title": "Synthetic Compute Credit Policy",
+      "text": "Compute credits are reviewed at the beginning of each month. Requests go to lab operations.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    },
+    {
+      "source_id": "S8", "title": "Synthetic Student Repository Requirements",
+      "text": "Student project repositories must include a README and an attribution section for external sources.",
+      "source_type": "synthetic", "author": "Bhagyasri Uddandam", "year": "2026",
+      "license_note": "Original synthetic coursework fixture"
+    }
+  ]
+}

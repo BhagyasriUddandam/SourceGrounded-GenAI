@@ -1,0 +1,13 @@
+groq<2,>=0.34
+
+[dev]
+pytest<10,>=8
+
+[pdf]
+pypdf<7,>=4
+
+[semantic]
+sentence-transformers<6,>=3
+
+[ui]
+streamlit<2,>=1.30
